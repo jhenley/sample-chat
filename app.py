@@ -11,29 +11,9 @@ st.set_page_config(
     layout="wide",  # Use wide layout for split screen
 )
 
-# Simple password protection
+# Authentication removed for public access
 if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
-
-if not st.session_state.authenticated:
-    # Center the login form
-    col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col2:
-        st.title("Login Required")
-        password = st.text_input("Enter Password:", type="password")
-        login_button = st.button("Login")
-        
-        if login_button:
-            if password == "Classw0rks!":
-                st.session_state.authenticated = True
-                st.success("Login successful!")
-                st.rerun()  # Use st.rerun() in newer Streamlit versions
-            else:
-                st.error("Incorrect password. Please try again.")
-    
-    # Stop the app from running further if not authenticated
-    st.stop()
+    st.session_state.authenticated = True
 
 # Custom CSS for more Material Design feel with smaller headings
 st.markdown("""
