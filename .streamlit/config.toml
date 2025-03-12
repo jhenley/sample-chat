@@ -1,0 +1,15 @@
+[theme]
+# Primary accent color (Material Indigo)
+primaryColor = "#3F51B5"
+
+# Background color for the main content area
+backgroundColor = "#FFFFFF"
+
+# Background color used for the sidebar and most interactive widgets
+secondaryBackgroundColor = "#F8F8F8"
+
+# Color used for almost all text
+textColor = "#000000"
+
+# Font family for all text in the app, except code blocks
+font = "sans-serif"

@@ -1,0 +1,40 @@
+# Material Design Theme for Streamlit
+
+[theme]
+# Primary accent color (Material Purple)
+primaryColor = "#6200EE"
+
+# Background color for the main content area
+backgroundColor = "#FFFFFF"
+
+# Background color for sidebar and widgets (Light Gray)
+secondaryBackgroundColor = "#F5F5F5"
+
+# Text color (Black)
+textColor = "#000000"
+
+# Font family
+font = "Roboto, sans-serif"
+
+# Instructions:
+# 1. To apply this theme, copy the [theme] section above
+# 2. Paste it into your .streamlit/config.toml file
+# 3. If you want a different primary color, here are some Material Design options:
+#    - Red: "#F44336"
+#    - Pink: "#E91E63"
+#    - Purple: "#9C27B0"
+#    - Deep Purple: "#673AB7"
+#    - Indigo: "#3F51B5"
+#    - Blue: "#2196F3"
+#    - Light Blue: "#03A9F4"
+#    - Cyan: "#00BCD4"
+#    - Teal: "#009688"
+#    - Green: "#4CAF50"
+#    - Light Green: "#8BC34A"
+#    - Lime: "#CDDC39"
+#    - Yellow: "#FFEB3B"
+#    - Amber: "#FFC107"
+#    - Orange: "#FF9800"
+#    - Deep Orange: "#FF5722"
+#    - Brown: "#795548"
+#    - Blue Gray: "#607D8B"
