@@ -245,38 +245,47 @@ with data_col:
         **Name:** Michael Faraday  
         **Grade:** 5th Grade  
         **Age:** 10  
+        **DOB:** 2013-11-02  
         **Teacher:** Jerry Henley  
         """)
         
         st.markdown("### Demographic Information")
         demo_data = {
             "Gender": "Male",
-            "Special Education": "No",
+            "Special Education": "Yes",
             "English Language Learner": "No",
-            "Economically Disadvantaged": "No"
+            "Economically Disadvantaged": "Yes"
         }
         st.table(demo_data)
         
     # Screener tab
     with tabs[1]:
-        st.markdown("### Universal Screener Results")
+        st.markdown("### Classworks Universal Academic Assessment")
+        st.markdown("**Fall Assessment (September 2023)**")
+        fall_data = {
+            "Domain": ["Reading", "Math", "Grammar/Usage", "Word Analysis"],
+            "Score": [270, 380, 290, 400],
+            "Percentile": [5, 24, 8, 32],
+            "Grade Level Equivalent": ["2nd", "4th", "2nd", "4th"]
+        }
+        st.dataframe(fall_data)
+        
         st.markdown("**Winter Assessment (December 2023)**")
         winter_data = {
             "Domain": ["Reading", "Math", "Grammar/Usage", "Word Analysis"],
-            "Score": [320, 360, 320, 440],
-            "Percentile": [10, 18, 12, 35],
-            "Grade Level Equivalent": ["2nd", "4th", "2nd", "5th"]
+            "Score": [370, 370, 320, 440],
+            "Percentile": [18, 18, 12, 35],
+            "Grade Level Equivalent": ["4th", "4th", "3rd", "5th"]
         }
         st.dataframe(winter_data)
         
-        st.markdown("**Spring Assessment (March 2024)**")
-        spring_data = {
-            "Domain": ["Reading", "Math", "Grammar/Usage", "Word Analysis"],
-            "Score": [360, 380, 370, 490],
-            "Percentile": [18, 24, 22, 45],
-            "Grade Level Equivalent": ["4th", "4th", "4th", "5th"]
-        }
-        st.dataframe(spring_data)
+        st.markdown("### Instructional Recommendations")
+        st.markdown("""
+        - **Reading**: Tier 2 intervention needed; focus on reading comprehension strategies
+        - **Math**: Tier 2 intervention needed; focus on mathematical processes
+        - **Grammar**: Tier 2 intervention needed; focus on sentence structure
+        - **Word Analysis**: On grade level; continue with current instruction
+        """)
         
     # Progress Monitoring tab
     with tabs[2]:
@@ -294,6 +303,21 @@ with data_col:
         }
         st.dataframe(progress_data)
         
+        st.markdown("### Growth Analysis")
+        growth_data = {
+            "Metric": ["Current Rate of Improvement (ROI)", "Expected ROI", "Aggressive ROI"],
+            "Value": ["-1.71543", "1.5", "2.0"]
+        }
+        st.dataframe(growth_data)
+        
+        st.markdown("### Intervention Recommendation")
+        st.markdown("""
+        - **Status**: Below expected growth targets
+        - **Action Needed**: Adjust current intervention approach
+        - **Target Skills**: Reading comprehension, grammar structure
+        - **Recommended Frequency**: Daily 30-minute sessions
+        """)
+        
     # Classroom Observations tab
     with tabs[3]:
         st.markdown("### Teacher Observations")
@@ -301,17 +325,27 @@ with data_col:
         - Struggles with reading comprehension but excels in word analysis
         - Strong mathematical reasoning but inconsistent performance
         - Enjoys hands-on activities and group work
-        - Sometimes has difficulty maintaining focus during long reading tasks
-        - Shows interest in science-related topics
-        - Participates actively in class discussions
+        - Difficulty maintaining focus during long reading tasks
+        - Shows special interest in science-related topics
+        - Participates actively in class discussions when confident about the material
+        """)
+        
+        st.markdown("### Engagement & Learning Style")
+        st.markdown("""
+        - Visual learner who benefits from diagrams and graphic organizers
+        - Responds well to 1:1 instruction
+        - Needs frequent breaks during extended reading tasks
+        - More engaged with digital learning tools than traditional workbooks
+        - Performs better in morning sessions than afternoon
         """)
         
         st.markdown("### Behavior Notes")
         st.markdown("""
-        - Generally well-behaved
-        - Works well with peers
-        - Occasionally frustrated when struggling with reading tasks
-        - Needs occasional redirection during independent work
+        - Generally well-behaved but occasionally frustrated during reading tasks
+        - Works well with peers in structured group activities
+        - Shows anxiety when asked to read aloud in class
+        - Needs consistent redirections during independent work
+        - Uses positive coping strategies when provided with clear expectations
         """)
 
 # Continue within chat_col to put the chat UI only in the left column
