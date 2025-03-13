@@ -130,17 +130,25 @@ def initialize_client():
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Load system prompt from file
+# Load system prompt from file 
 def load_system_prompt():
     system_prompt_path = os.path.join(os.path.dirname(__file__), "system_prompt.txt")
     try:
         with open(system_prompt_path, "r") as f:
-            return f.read().strip()
+            system_prompt = f.read().strip()
+        
+        return system_prompt
     except FileNotFoundError:
         return "You are a helpful AI assistant that provides clear, concise answers."
 
+# Get system prompt with current date
+def get_system_prompt_with_date():
+    base_prompt = load_system_prompt()
+    current_date = datetime.now().strftime("%A, %B %d, %Y")
+    return f"{base_prompt}\n\nToday's Date: {current_date}"
+
 if "system_prompt" not in st.session_state:
-    st.session_state.system_prompt = load_system_prompt()
+    st.session_state.system_prompt = get_system_prompt_with_date()
 
 if "client" not in st.session_state:
     st.session_state.client = initialize_client()
@@ -408,6 +416,9 @@ with chat_col:
         
         # Set up for Wittly's initial greeting
         try:
+            # Refresh system prompt with current date 
+            st.session_state.system_prompt = get_system_prompt_with_date()
+            
             # Add a hidden user message to trigger the conversation
             st.session_state.messages.append({
                 "role": "user", 
@@ -483,11 +494,14 @@ def stream_response():
             full_response = ""
         
         try:
+            # Get fresh system prompt with current date
+            system_prompt_with_date = get_system_prompt_with_date()
+            
             # Make a streaming request
             with st.session_state.client.messages.stream(
                 model=st.session_state.selected_model,
                 max_tokens=4000,
-                system=st.session_state.system_prompt,
+                system=system_prompt_with_date,
                 messages=[
                     {"role": m["role"], "content": m["content"]} 
                     for m in st.session_state.messages
