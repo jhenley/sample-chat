@@ -236,7 +236,7 @@ with student_list_col:
 # Add data column with tabs
 with data_col:
     # Create tabs for different data sections
-    tabs = st.tabs(["Student Details", "Screener", "Progress Monitoring", "Classroom Observations"])
+    tabs = st.tabs(["Student Details", "Academic Screener", "Progress Monitoring", "Classroom Observations"])
     
     # Student Details tab
     with tabs[0]:
@@ -258,45 +258,87 @@ with data_col:
         }
         st.table(demo_data)
         
-    # Screener tab
+    # Academic Screener tab
     with tabs[1]:
         st.markdown("### Classworks Universal Academic Assessment")
-        st.markdown("**Fall Assessment (September 2023)**")
-        fall_data = {
-            "Domain": ["Reading", "Math", "Grammar/Usage", "Word Analysis"],
-            "Score": [270, 380, 290, 400],
-            "Percentile": [5, 24, 8, 32],
-            "Grade Level Equivalent": ["2nd", "4th", "2nd", "4th"]
-        }
-        st.dataframe(fall_data)
         
-        st.markdown("**Winter Assessment (December 2023)**")
-        winter_data = {
-            "Domain": ["Reading", "Math", "Grammar/Usage", "Word Analysis"],
-            "Score": [370, 370, 320, 440],
-            "Percentile": [18, 18, 12, 35],
-            "Grade Level Equivalent": ["4th", "4th", "3rd", "5th"]
+        # Reading section
+        st.markdown("## Reading Assessment")
+        
+        # Fall Reading
+        st.markdown("### Fall Reading Assessment (September 2023)")
+        st.markdown("**Overall Reading: Score 270, Percentile 2, Grade Level Equivalent: 2nd**")
+        fall_reading_data = {
+            "Domain": ["Word Analysis", "Reading", "Grammar/Usage/Mechanics"],
+            "Score": [200, 290, 320],
+            "Grade Level Equivalent": ["K", "2nd", "2nd"]
         }
-        st.dataframe(winter_data)
+        st.dataframe(fall_reading_data)
+        
+        # Winter Reading
+        st.markdown("### Winter Reading Assessment (December 2023)")
+        st.markdown("**Overall Reading: Score 370, Percentile 24, Grade Level Equivalent: 4th**")
+        winter_reading_data = {
+            "Domain": ["Word Analysis", "Reading", "Grammar/Usage/Mechanics"],
+            "Score": [430, 330, 400],
+            "Grade Level Equivalent": ["5th", "3rd", "4th"]
+        }
+        st.dataframe(winter_reading_data)
+        
+        # Math section
+        st.markdown("## Mathematics Assessment")
+        
+        # Fall Math
+        st.markdown("### Fall Mathematics Assessment (September 2023)")
+        st.markdown("**Overall Mathematics: Score 380, Percentile 24, Grade Level Equivalent: 4th**")
+        fall_math_data = {
+            "Domain": ["Geometry", "Algebra", "Measurement", "Mathematical Processes", "Statistics and Probability"],
+            "Score": [390, 370, 370, 370, 390],
+            "Grade Level Equivalent": ["4th", "4th", "4th", "4th", "4th"]
+        }
+        st.dataframe(fall_math_data)
+        
+        # Winter Math
+        st.markdown("### Winter Mathematics Assessment (December 2023)")
+        st.markdown("**Overall Mathematics: Score 370, Percentile 16, Grade Level Equivalent: 4th**")
+        winter_math_data = {
+            "Domain": ["Mathematical Processes", "Measurement", "Statistics and Probability", "Algebra", "Geometry"],
+            "Score": [200, 400, 200, 360, 400],
+            "Grade Level Equivalent": ["K", "4th", "K", "3rd", "4th"]
+        }
+        st.dataframe(winter_math_data)
         
         st.markdown("### Instructional Recommendations")
         st.markdown("""
         - **Reading**: Tier 2 intervention needed; focus on reading comprehension strategies
-        - **Math**: Tier 2 intervention needed; focus on mathematical processes
-        - **Grammar**: Tier 2 intervention needed; focus on sentence structure
-        - **Word Analysis**: On grade level; continue with current instruction
+        - **Mathematical Processes**: Tier 3 intervention needed; significant focus required
+        - **Statistics and Probability**: Tier 3 intervention needed; targeted support required
+        - **Algebra**: Tier 2 intervention needed; focus on algebraic concepts
+        - **Grammar/Usage/Mechanics**: Continue Tier 2 intervention with current strategies
         """)
         
     # Progress Monitoring tab
     with tabs[2]:
+        st.markdown("## Grade 1 Mathematics - Mathematical Processes")
         st.markdown("### Weekly Progress Monitoring")
-        progress_scores = [77, 62, 0, 85, 69, 69, 69, 85, 0, 0, 100, 0]
+        
+        # Reordering dates chronologically and corresponding scores
         progress_dates = ["Mar 21", "Mar 25", "Mar 31 (Skip)", "Apr 8", "Apr 15", 
                          "Apr 22", "May 1", "May 10", "May 12 (Skip)", 
                          "May 19 (Skip)", "May 30", "Jun 2 (Skip)"]
+        progress_scores = [77, 62, 0, 85, 69, 69, 69, 85, 0, 0, 100, 0]
         
-        st.line_chart(progress_scores)
-        st.markdown("**Weekly Assessments:**")
+        # Create a chart-friendly version (removing skips)
+        chart_dates = ["Mar 21", "Mar 25", "Apr 8", "Apr 15", "Apr 22", "May 1", "May 10", "May 30"]
+        chart_scores = [77, 62, 85, 69, 69, 69, 85, 100]
+        
+        # Creating a dictionary for the chart
+        chart_data = {"Score": chart_scores}
+        
+        # Display the chart with the title
+        st.line_chart(chart_data)
+        
+        st.markdown("**Weekly Assessments (Chronological Order):**")
         progress_data = {
             "Date": progress_dates,
             "Score": progress_scores,
@@ -310,12 +352,22 @@ with data_col:
         }
         st.dataframe(growth_data)
         
+        st.markdown("### Skill Focus Areas")
+        st.markdown("""
+        - Create, describe, and record a variety of patterns
+        - Identify and describe the rule for a pattern
+        - Identify the mathematics in everyday situations
+        - Relate informal language to mathematical language and symbols
+        - Apply problem-solving strategies (guessing/checking, pattern recognition)
+        """)
+        
         st.markdown("### Intervention Recommendation")
         st.markdown("""
         - **Status**: Below expected growth targets
         - **Action Needed**: Adjust current intervention approach
-        - **Target Skills**: Reading comprehension, grammar structure
+        - **Target Skills**: Mathematical processes, pattern recognition
         - **Recommended Frequency**: Daily 30-minute sessions
+        - **Approach**: Use manipulatives and concrete examples to demonstrate concepts
         """)
         
     # Classroom Observations tab
