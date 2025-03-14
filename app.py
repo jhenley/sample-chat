@@ -156,6 +156,28 @@ if "client" not in st.session_state:
 # Create a three-column layout: student list, chat, and data
 student_list_col, chat_col, data_col = st.columns([0.15, 0.45, 0.40])  # Students, chat, data
 
+# Add additional CSS to make tabs fit better
+st.markdown("""
+<style>
+    /* Make tab container take full width */
+    .stTabs [data-baseweb="tab-list"] {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    /* Make tabs take equal width */
+    .stTabs [data-baseweb="tab"] {
+        flex-grow: 1;
+        text-align: center;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Chat column content
 with chat_col:
     # Model selection
@@ -244,7 +266,7 @@ with student_list_col:
 # Add data column with tabs
 with data_col:
     # Create tabs for different data sections
-    tabs = st.tabs(["Student Details", "Academic Screener", "Progress Monitoring", "Classroom Observations"])
+    tabs = st.tabs(["Details", "Screener", "Progress", "Observations", "Portfolio"])
     
     # Student Details tab
     with tabs[0]:
@@ -378,7 +400,7 @@ with data_col:
         - **Approach**: Use manipulatives and concrete examples to demonstrate concepts
         """)
         
-    # Classroom Observations tab
+    # Observations tab
     with tabs[3]:
         st.markdown("### Teacher Observations")
         st.markdown("""
@@ -407,6 +429,72 @@ with data_col:
         - Needs consistent redirections during independent work
         - Uses positive coping strategies when provided with clear expectations
         """)
+        
+    # Portfolio tab
+    with tabs[4]:
+        st.markdown("## Student Work Portfolio")
+        
+        # Table of student work samples
+        st.markdown("### Work Samples")
+        
+        # Create a dataframe for the sample works
+        import pandas as pd
+        
+        # Create sample data
+        data = {
+            "Subject": ["Writing", "Writing", "Math", "Math", "Science", "Art", "Social Studies"],
+            "Date Uploaded": ["Feb 15, 2025", "Jan 22, 2025", "Mar 05, 2025", "Feb 28, 2025", "Feb 10, 2025", "Mar 01, 2025", "Jan 15, 2025"],
+            "Assignment Name": ["My Space Adventure", "Book Report: Charlotte's Web", "Pattern Recognition Assessment", "Word Problems", "Solar System Model", "Self-Portrait", "Native American Cultures"],
+            "Grade": ["B-", "C+", "C", "D+", "A-", "B+", "B-"],
+            "View": ["View", "View", "View", "View", "View", "View", "View"]
+        }
+        
+        # Create DataFrame
+        df = pd.DataFrame(data)
+        
+        # Display table with formatting
+        st.dataframe(
+            df,
+            column_config={
+                "Subject": st.column_config.TextColumn("Subject"),
+                "Date Uploaded": st.column_config.TextColumn("Date Uploaded"),
+                "Assignment Name": st.column_config.TextColumn("Assignment Name"),
+                "Grade": st.column_config.TextColumn("Grade"),
+                "View": st.column_config.LinkColumn("Action")
+            },
+            hide_index=True,
+        )
+        
+        # Sample content display - this would normally be triggered by clicking "View"
+        st.markdown("### Sample Preview")
+        with st.expander("My Space Adventure - Writing Sample", expanded=True):
+            st.markdown("""
+            **Date:** Feb 15, 2025  
+            **Subject:** Writing  
+            **Grade:** B-
+            
+            **Teacher Comments:** Michael demonstrates creativity in his storytelling but 
+            struggles with grammar and sentence structure. Characters and plot are well-developed.
+            
+            **Sample:**
+            
+            One day me and my frend Tom went to space. We saw lots of stars 
+            and planets. The moon was relly big up close! We landed on Mars. 
+            It was red and dusty. We found rocks that look funny. I took 
+            some home for my colection. Space is cool but I missed my dog.
+            """)
+        
+        # Upload section
+        st.markdown("### Upload New Work Sample")
+        
+        # Category selection
+        st.selectbox("Category", ["Writing", "Math", "Science", "Art", "Social Studies", "Other"])
+        
+        # File uploader
+        st.file_uploader("Select file to upload", type=["pdf", "doc", "docx", "jpg", "png"])
+        
+        # Submit button
+        st.button("Upload to Portfolio")
 
 # Continue within chat_col to put the chat UI only in the left column
 with chat_col:
@@ -610,13 +698,14 @@ with chat_col:
         
         /* Style the tabs in the data column */
         .stTabs [data-baseweb="tab-list"] {
-            gap: 10px;
+            gap: 2px;
         }
         .stTabs [data-baseweb="tab"] {
-            height: 40px;
+            height: 32px;
             border-radius: 5px 5px 0 0;
-            padding: 10px 20px;
+            padding: 5px 10px;
             background-color: #f5f5f5;
+            font-size: 0.85rem;
         }
         .stTabs [aria-selected="true"] {
             background-color: white;
