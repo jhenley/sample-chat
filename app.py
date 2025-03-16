@@ -185,13 +185,14 @@ with chat_col:
         st.session_state.selected_model = "claude-3-7-sonnet-20250219"
 
     # Create columns for header and model selection
-    header_col, dropdown_col = st.columns([3, 1])
+    #header_col, 
+    dropdown_col = st.columns([3, 1])
 
-    with header_col:
-        # App header with smaller font sizes
-       # st.markdown("""
-        #    <h1 style="font-size: 1.8rem; margin-bottom: 0.2rem;">Chat with Wittly</h1>
-       # """, unsafe_allow_html=True)
+   # with header_col:
+    #     App header with smaller font sizes
+     #   st.markdown("""
+     #     <h1 style="font-size: 1.8rem; margin-bottom: 0.2rem;">Chat with Wittly</h1>
+     #   """, unsafe_allow_html=True)
 
     with dropdown_col:
         st.session_state.selected_model = st.selectbox(
