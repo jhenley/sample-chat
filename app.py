@@ -6,7 +6,7 @@ import time
 
 # App title and configuration
 st.set_page_config(
-    page_title="Claude Chat Assistant",
+    page_title="Wittly by TouchMath",
     page_icon="💬",
     layout="wide",  # Use wide layout for split screen
 )
@@ -224,10 +224,16 @@ with student_list_col:
         st.session_state.selected_student = "Michael Faraday"
     
     # Define student list with their status (alphabetical)
-    students = [
-        {"name": "Michael Faraday", "grade": "5th", "selected": True},
-        {"name": "Sarah Thompson", "grade": "4th", "selected": False},
-    ]
+students = [
+    {"name": "Aiden Patel", "grade": "4th", "selected": False},
+    {"name": "Charlotte Brown", "grade": "3rd", "selected": False},
+    {"name": "Emma Chen", "grade": "5th", "selected": False},
+    {"name": "Isabella Garcia", "grade": "3rd", "selected": False},
+    {"name": "Lucas Nguyen", "grade": "4th", "selected": False},
+    {"name": "Michael Faraday", "grade": "5th", "selected": True},
+    {"name": "Noah Kim", "grade": "3rd", "selected": False},
+    {"name": "Olivia Washington", "grade": "5th", "selected": False}
+]
     
     # Create student list buttons with selected state styling
     st.markdown("""
