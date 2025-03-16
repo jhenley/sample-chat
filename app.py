@@ -203,7 +203,7 @@ with chat_col:
     
 # Student list column
 with student_list_col:
-    st.markdown("## Students")
+    st.markdown("## My Students")
     
     # Add New Student button (with custom styling to ensure it remains black)
     st.markdown("""
