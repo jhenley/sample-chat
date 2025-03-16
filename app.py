@@ -225,8 +225,14 @@ with student_list_col:
     
     # Define student list with their status (alphabetical)
     students = [
+        {"name": "Aiden Patel", "grade": "4th", "selected": False},
+        {"name": "Charlotte Brown", "grade": "3rd", "selected": False},
+        {"name": "Emma Chen", "grade": "5th", "selected": False},
+        {"name": "Isabella Garcia", "grade": "3rd", "selected": False},
+        {"name": "Lucas Nguyen", "grade": "4th", "selected": False},
         {"name": "Michael Faraday", "grade": "5th", "selected": True},
-        {"name": "Sarah Thompson", "grade": "4th", "selected": False},
+        {"name": "Noah Kim", "grade": "3rd", "selected": False},
+        {"name": "Olivia Washington", "grade": "5th", "selected": False}
     ]
     
     # Create student list buttons with selected state styling
