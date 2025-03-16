@@ -189,9 +189,9 @@ with chat_col:
 
     with header_col:
         # App header with smaller font sizes
-        st.markdown("""
-            <h1 style="font-size: 1.8rem; margin-bottom: 0.2rem;">Chat with Wittly</h1>
-        """, unsafe_allow_html=True)
+       # st.markdown("""
+        #    <h1 style="font-size: 1.8rem; margin-bottom: 0.2rem;">Chat with Wittly</h1>
+       # """, unsafe_allow_html=True)
 
     with dropdown_col:
         st.session_state.selected_model = st.selectbox(
