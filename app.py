@@ -465,25 +465,6 @@ with data_col:
             hide_index=True,
         )
         
-        # Sample content display - this would normally be triggered by clicking "View"
-        st.markdown("### Sample Preview")
-        with st.expander("My Space Adventure - Writing Sample", expanded=True):
-            st.markdown("""
-            **Date:** Feb 15, 2025  
-            **Subject:** Writing  
-            **Grade:** B-
-            
-            **Teacher Comments:** Michael demonstrates creativity in his storytelling but 
-            struggles with grammar and sentence structure. Characters and plot are well-developed.
-            
-            **Sample:**
-            
-            One day me and my frend Tom went to space. We saw lots of stars 
-            and planets. The moon was relly big up close! We landed on Mars. 
-            It was red and dusty. We found rocks that look funny. I took 
-            some home for my colection. Space is cool but I missed my dog.
-            """)
-        
         # Upload section
         st.markdown("### Upload New Work Sample")
         
