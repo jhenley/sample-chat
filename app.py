@@ -3,6 +3,7 @@ import anthropic
 from datetime import datetime
 import os
 import time
+import base64
 
 # App title and configuration
 st.set_page_config(
@@ -196,8 +197,10 @@ with chat_col:
     with dropdown_col:
         st.session_state.selected_model = st.selectbox(
             "Model",
-            ["claude-3-7-sonnet-20250219", "claude-3-5-sonnet-20241022"],
-            format_func=lambda x: "Claude 3.7 Sonnet" if x == "claude-3-7-sonnet-20250219" else "Claude 3.5 Sonnet",
+            ["claude-3-7-sonnet-20250219", "claude-3-5-sonnet-20241022", "claude-3-opus-20240229"],
+            format_func=lambda x: "Claude 3.7 Sonnet" if x == "claude-3-7-sonnet-20250219" 
+                        else "Claude 3.5 Sonnet" if x == "claude-3-5-sonnet-20241022"
+                        else "Claude 3 Opus",
             label_visibility="collapsed"
         )
     
@@ -530,12 +533,26 @@ with chat_col:
             content = message["content"]
             
             if role == "user":
-                st.markdown(f"""
-                <div class="chat-message user">
-                    <div class="avatar">👤 You:</div>
-                    <div class="content">{content.strip()}</div>
-                </div>
-                """, unsafe_allow_html=True)
+                # Check if content is a list (multi-modal message with image)
+                if isinstance(content, list):
+                    with st.chat_message("user", avatar="👤"):
+                        # Extract text and image from content
+                        for block in content:
+                            if block["type"] == "text":
+                                st.write(block["text"])
+                            elif block["type"] == "image":
+                                # Display the image
+                                image_data = block["source"]["data"]
+                                image_type = block["source"]["media_type"]
+                                st.image(f"data:{image_type};base64,{image_data}", use_container_width=True)
+                else:
+                    # Plain text message
+                    st.markdown(f"""
+                    <div class="chat-message user">
+                        <div class="avatar">👤 You:</div>
+                        <div class="content">{content.strip()}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
             else:
                 # For assistant messages, use Streamlit's markdown renderer
                 # to properly handle code blocks, lists, etc.
@@ -549,13 +566,48 @@ if "is_streaming" not in st.session_state:
 # Function to handle the conversation 
 def handle_send():
     user_input = st.session_state.current_input
-    if user_input:  # Only process if there's actual input
+    has_image = False
+    
+    # Check if there's an uploaded image in session state
+    if "uploaded_image" in st.session_state and st.session_state.uploaded_image is not None:
+        has_image = True
+    
+    if user_input or has_image:  # Process if there's text input or an image
         # Set streaming flag
         st.session_state.is_streaming = True
         # Clear input
         st.session_state.current_input = ""
-        # Add user message to history
-        st.session_state.messages.append({"role": "user", "content": user_input})
+        
+        # Create message content
+        if has_image:
+            # For messages with images, we need to create a message with both text and image
+            image = st.session_state.uploaded_image
+            
+            # Create content blocks for the message (text and image)
+            message_content = [
+                {
+                    "type": "text",
+                    "text": user_input if user_input else "What do you see in this image?"
+                },
+                {
+                    "type": "image",
+                    "source": {
+                        "type": "base64", 
+                        "media_type": f"image/{image.type.split('/')[-1]}", 
+                        "data": base64.b64encode(image.getvalue()).decode("utf-8")
+                    }
+                }
+            ]
+            
+            # Add the message with image to history
+            st.session_state.messages.append({"role": "user", "content": message_content})
+            
+            # Clear the uploaded image from session state
+            st.session_state.uploaded_image = None
+        else:
+            # For text-only messages, add as before
+            st.session_state.messages.append({"role": "user", "content": user_input})
+        
         # Rerun to show the user message immediately
         st.rerun()
 
@@ -572,15 +624,23 @@ def stream_response():
             # Get fresh system prompt with current date
             system_prompt_with_date = get_system_prompt_with_date()
             
+            # Prepare messages for the API call
+            api_messages = []
+            for msg in st.session_state.messages:
+                # Handle different message formats (text-only vs multi-modal)
+                if isinstance(msg["content"], list):
+                    # This is a multi-modal message with image
+                    api_messages.append({"role": msg["role"], "content": msg["content"]})
+                else:
+                    # This is a text-only message
+                    api_messages.append({"role": msg["role"], "content": msg["content"]})
+            
             # Make a streaming request
             with st.session_state.client.messages.stream(
                 model=st.session_state.selected_model,
                 max_tokens=4000,
                 system=system_prompt_with_date,
-                messages=[
-                    {"role": m["role"], "content": m["content"]} 
-                    for m in st.session_state.messages
-                ]
+                messages=api_messages
             ) as stream:
                 # Display the response as it comes in
                 for chunk in stream:
@@ -683,6 +743,32 @@ with chat_col:
             background-color: #000000 !important;
         }
         
+        /* Style the file uploader */
+        [data-testid="stFileUploader"] {
+            margin-top: 5px;
+        }
+        
+        /* Make the file uploader more compact */
+        [data-testid="stFileUploader"] > div:first-child {
+            padding: 0.5rem !important;
+        }
+        
+        /* Style the upload button */
+        [data-testid="stFileUploader"] button {
+            background-color: #f0f0f0 !important;
+            color: #333333 !important;
+            border-radius: 4px;
+            padding: 0.2rem 0.5rem !important;
+            font-size: 0.8rem !important;
+        }
+        
+        /* Image display in chat */
+        .stImage img {
+            border-radius: 8px;
+            max-height: 300px;
+            margin: 10px 0;
+        }
+        
         /* Style the tabs in the data column */
         .stTabs [data-baseweb="tab-list"] {
             gap: 2px;
@@ -730,6 +816,19 @@ with chat_col:
                 placeholder="Ask Wittly something...",
                 value=st.session_state.current_input,
                 height=70)  # Smaller fixed height for the text area
+            
+            # Add image upload functionality with custom styling and preview
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                uploaded_image = st.file_uploader("Upload an image for Claude to analyze", 
+                                                type=["jpg", "jpeg", "png"], 
+                                                label_visibility="collapsed")
+                
+                # Display image preview if uploaded
+                if uploaded_image is not None:
+                    # Calculate a small preview size
+                    preview_width = 150
+                    st.image(uploaded_image, width=preview_width, caption="Image preview")
                 
             # Show the form's submit button
             submit_button = st.form_submit_button("Send")
@@ -737,7 +836,13 @@ with chat_col:
             # Handle form submission
             if submit_button and not st.session_state.is_streaming:
                 st.session_state.current_input = user_input
-                if user_input:
+                
+                # Handle uploaded image
+                if uploaded_image is not None:
+                    # Save uploaded image to memory
+                    st.session_state.uploaded_image = uploaded_image
+                
+                if user_input or uploaded_image is not None:
                     handle_send()
         
         st.markdown('</div>', unsafe_allow_html=True)
