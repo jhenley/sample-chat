@@ -640,13 +640,18 @@ def stream_response():
                 model=st.session_state.selected_model,
                 max_tokens=4000,
                 system=system_prompt_with_date,
-                messages=api_messages
+                messages=api_messages,
+                thinking={"type": "enabled", "budget_tokens": 1024}
             ) as stream:
                 # Display the response as it comes in
                 for chunk in stream:
-                    if chunk.type == "content_block_delta" and chunk.delta.text:
+                    if chunk.type == "content_block_delta" and hasattr(chunk.delta, "text"):
                         full_response += chunk.delta.text
                         streaming_placeholder.markdown(full_response)
+                    # Handle thinking chunks separately (if we want to display them)
+                    elif chunk.type == "thinking_delta":
+                        # Skip thinking chunks for now - we could display them if needed
+                        pass
             
             # Add the full response to history
             st.session_state.messages.append({
